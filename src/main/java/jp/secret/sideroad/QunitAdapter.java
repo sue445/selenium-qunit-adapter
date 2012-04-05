@@ -1,6 +1,5 @@
-package main.java;
-
-import static org.junit.Assert.fail;
+package jp.secret.sideroad;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class QunitAdapter {
 
 		drivers = new HashMap<String, WebDriver>();
 		String[] browsers = bundle.getString("webdriver.browsers").split(",");
-		
+
 		hud = new HtmlUnitDriver();
 
 		for (String browser : browsers) {
@@ -86,13 +85,15 @@ public class QunitAdapter {
 	@Test
 	public void testQunit() throws Exception {
 		for (File file : files) {
-			if( file == null ) continue;
+			if( file == null ) {
+				continue;
+			}
 			String url = baseUrl + file.getAbsolutePath().replace(serverRoot, "").replace("\\","/");
 			hud.get(url);
 			String title = hud.getTitle();
 			System.out.println(url);
 			System.out.println(title);
-			
+
 			for (String browser : drivers.keySet()) {
 				WebDriver driver = drivers.get(browser);
 
@@ -105,8 +106,9 @@ public class QunitAdapter {
 					}
 					try {
 						if (isElementPresent(driver,
-								By.cssSelector("#qunit-testresult")))
+								By.cssSelector("#qunit-testresult"))) {
 							break;
+						}
 					} catch (Exception e) {
 					}
 					Thread.sleep(1000);
@@ -130,14 +132,14 @@ public class QunitAdapter {
 				}
 				boolean isSuccessed = passed.equals(total)
 						&& failed.equals("0");
-				
+
 				String result = ((isSuccessed) ? "Success!" : "Failed!")
 						+ " : Passed [" + passed + "] Failed [" + failed +"]"
 						+ " : " + browser;
 				System.out.println( result );
-				
+
 				if(!isSuccessed){
-					verificationErrors.append(file.getAbsolutePath()+" : " + title + " : " + result ); 
+					verificationErrors.append(file.getAbsolutePath()+" : " + title + " : " + result );
 				}
 
 			}

@@ -1,5 +1,4 @@
-package main.java;
-
+package jp.secret.sideroad;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 
+ *
  */
 public class FileSearch {
 
@@ -25,10 +24,10 @@ public class FileSearch {
 	/**
 	 * 指定したディレクトリ[directoryPath]から、 検索対象のファイル[fileName]を再帰的に検索し、該当する
 	 * ファイルオブジェクトのリストを返します。
-	 * 
+	 *
 	 * 例) File[] files =listFiles("C:/filelist/", "*.java");
 	 * 上記の例では、ディレクトリfilelistを再帰的に検索し、 拡張子javaのファイルリストを取得します。
-	 * 
+	 *
 	 * @param directoryPath
 	 *            検索対象のディレクトリを表すパス
 	 * @param fileName
@@ -47,12 +46,12 @@ public class FileSearch {
 	/**
 	 * 指定したディレクトリ[directoryPath]から、正規表現として指定された
 	 * 検索対象のファイル[fileNamePattern]を再帰的に検索し、 該当するファイルオブジェクトのリストを返します。
-	 * 
+	 *
 	 * また、ファイルの更新日付が指定日数経過しているかどうかを検索条件に 指定する事ができます。
-	 * 
+	 *
 	 * 例) File[] files = listFiles("C:/filelist/", "*.java",TYPE_FILE, true, 2);
 	 * 上記の例では、ディレクトリfilelistを再帰的に検索し、7日前以降に更新 された拡張子javaのファイルリストを取得します。
-	 * 
+	 *
 	 * @param directoryPath
 	 *            検索対象のディレクトリを表すパス
 	 * @param fileNamePattern
@@ -175,7 +174,7 @@ public class FileSearch {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (File[])matchedFile.toArray(new File[0]);
+		return matchedFile.toArray(new File[0]);
 
 	}
 }

@@ -1,8 +1,18 @@
-package main.java;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
+package jp.secret.sideroad;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URLConnection;
+import java.util.Date;
 
 public class FileServer {
 	int port;
@@ -16,6 +26,7 @@ public class FileServer {
 	Boolean isRunning;
 
 	public class FileServerRunnable implements Runnable {
+		@Override
 		public void run() {
 
 			ServerSocket ss = null;
@@ -46,8 +57,9 @@ public class FileServer {
 					System.err.println(e);
 				}
 				try {
-					if (con != null)
+					if (con != null) {
 						con.close();
+					}
 				} catch (IOException e) {
 					System.err.println(e);
 				}
@@ -109,8 +121,9 @@ public class FileServer {
 						String contenttype = URLConnection
 								.guessContentTypeFromName(path);
 						pout.print("HTTP/1.0 200 OK\r\n");
-						if (contenttype != null)
+						if (contenttype != null) {
 							pout.print("Content-Type: " + contenttype + "\r\n");
+						}
 						pout.print("Date: " + new Date() + "\r\n"
 								+ "Server: IXWT FileServer 1.0\r\n\r\n");
 						sendFile(file, out); // send raw file
@@ -145,7 +158,8 @@ public class FileServer {
 
 	void sendFile(InputStream file, OutputStream out) throws IOException {
 		byte[] buffer = new byte[1000];
-		while (file.available() > 0)
+		while (file.available() > 0) {
 			out.write(buffer, 0, file.read(buffer));
+		}
 	}
 }
