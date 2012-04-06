@@ -16,10 +16,10 @@ import org.junit.rules.TemporaryFolder;
  * @author sue445
  *
  */
-public class TemporaryFile extends TemporaryFolder{
+public class TemporaryFiles extends TemporaryFolder{
 	private final String[] files;
 
-	public TemporaryFile(String... files){
+	public TemporaryFiles(String... files){
 		this.files = files;
 	}
 
@@ -33,7 +33,7 @@ public class TemporaryFile extends TemporaryFolder{
 	}
 
 	private void createTempFile(String filename) throws FileNotFoundException, IOException {
-		OutputStream stream = new FileOutputStream(getRootPath() + filename);
+		OutputStream stream = new FileOutputStream(getRootDirectory() + filename);
 		try{
 			stream.write(0);
 			stream.flush();
@@ -48,12 +48,12 @@ public class TemporaryFile extends TemporaryFolder{
 		}
 	}
 
-	public String getRootPath() {
+	public String getRootDirectory() {
 		return getRoot().getAbsolutePath() + "/";
 	}
 
 	public void assertExistsFile(String filename){
-		String filepath = getRootPath() + filename;
+		String filepath = getRootDirectory() + filename;
 		File file = new File(filepath);
 		assertThat(file.exists(), is(true));
 	}
