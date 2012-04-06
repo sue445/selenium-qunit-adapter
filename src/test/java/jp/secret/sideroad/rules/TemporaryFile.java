@@ -1,5 +1,9 @@
 package jp.secret.sideroad.rules;
 
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,5 +46,11 @@ public class TemporaryFile extends TemporaryFolder{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void assertExistsFile(String filename){
+		String filepath = getRoot().getAbsolutePath() + "/" + filename;
+		File file = new File(filepath);
+		assertThat(file.exists(), is(true));
 	}
 }
