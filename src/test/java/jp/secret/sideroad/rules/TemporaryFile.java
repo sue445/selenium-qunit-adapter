@@ -33,7 +33,7 @@ public class TemporaryFile extends TemporaryFolder{
 	}
 
 	private void createTempFile(String filename) throws FileNotFoundException, IOException {
-		OutputStream stream = new FileOutputStream(getRoot().getAbsolutePath() + "/" + filename);
+		OutputStream stream = new FileOutputStream(getRootPath() + filename);
 		try{
 			stream.write(0);
 			stream.flush();
@@ -48,8 +48,12 @@ public class TemporaryFile extends TemporaryFolder{
 		}
 	}
 
+	public String getRootPath() {
+		return getRoot().getAbsolutePath() + "/";
+	}
+
 	public void assertExistsFile(String filename){
-		String filepath = getRoot().getAbsolutePath() + "/" + filename;
+		String filepath = getRootPath() + filename;
 		File file = new File(filepath);
 		assertThat(file.exists(), is(true));
 	}
