@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.ResourceBundle;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -66,28 +67,36 @@ public class BrowserTest {
 
 	public static class NewWebDriverTest{
 		private ResourceBundle bundle = ResourceBundle.getBundle("application");
+		private WebDriver actual = null;
+
+		@After
+		public void tearDown() {
+			if(actual != null){
+				actual.quit();
+			}
+		}
 
 		@Test
 		public void firefox() throws Exception {
-			WebDriver actual = Browser.FIREFOX.newWebDriver(bundle);
+			actual = Browser.FIREFOX.newWebDriver(bundle);
 			assertThat(actual, is(instanceOf(FirefoxDriver.class)));
 		}
 
 		@Test
 		public void chrome() throws Exception {
-			WebDriver actual = Browser.CHROME.newWebDriver(bundle);
+			actual = Browser.CHROME.newWebDriver(bundle);
 			assertThat(actual, is(instanceOf(ChromeDriver.class)));
 		}
 
 		@Test
 		public void opera() throws Exception {
-			WebDriver actual = Browser.OPERA.newWebDriver(bundle);
+			actual = Browser.OPERA.newWebDriver(bundle);
 			assertThat(actual, is(instanceOf(OperaDriver.class)));
 		}
 
 		@Test
 		public void ie() throws Exception {
-			WebDriver actual = Browser.IE.newWebDriver(bundle);
+			actual = Browser.IE.newWebDriver(bundle);
 			assertThat(actual, is(instanceOf(InternetExplorerDriver.class)));
 		}
 	}
