@@ -35,11 +35,9 @@ public enum Browser {
 		FIREFOX {
 			@Override
 			WebDriver newWebDriver(ResourceBundle bundle) {
-				if (bundle.containsKey("webdriver.firefox.profile") &&
-						! bundle.getString("webdriver.firefox.profile").isEmpty()
-						) {
-					File profileDir = new File(
-							bundle.getString("webdriver.firefox.profile"));
+				String firefoxProfile = getBundleString(bundle, "webdriver.firefox.profile");
+				if (!firefoxProfile.isEmpty()) {
+					File profileDir = new File(firefoxProfile);
 					FirefoxProfile profile = new FirefoxProfile(profileDir);
 					return new FirefoxDriver(profile);
 				} else {
@@ -50,9 +48,9 @@ public enum Browser {
 		CHROME {
 			@Override
 			WebDriver newWebDriver(ResourceBundle bundle) {
-				if (bundle.containsKey("webdriver.chrome.driver")) {
-					System.setProperty("webdriver.chrome.driver",
-							bundle.getString("webdriver.chrome.driver"));
+				String chromeDriver = getBundleString(bundle, "webdriver.chrome.driver");
+				if (!chromeDriver.isEmpty()) {
+					System.setProperty("webdriver.chrome.driver", chromeDriver);
 				}
 				return new ChromeDriver();
 			}
@@ -80,7 +78,7 @@ public enum Browser {
 	 * @param key
 	 * @return if not found, return empty string
 	 */
-	public static String getString(ResourceBundle bundle, String key){
+	public static String getBundleString(ResourceBundle bundle, String key){
 		try {
 			return bundle.getString(key);
 		} catch (Exception e) {

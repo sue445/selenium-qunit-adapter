@@ -39,12 +39,12 @@ public class BrowserTest {
 		}
 	}
 
-	public static class GetStringTest{
+	public static class GetBundleStringTest{
 		private ResourceBundle bundle = ResourceBundle.getBundle("application");
 
 		@Test
 		public void found() throws Exception {
-			String actual = Browser.getString(bundle, "test.port");
+			String actual = Browser.getBundleString(bundle, "test.port");
 
 			assertThat(actual, is(notNullValue()));
 			assertThat(actual, is(not("")));
@@ -52,7 +52,7 @@ public class BrowserTest {
 
 		@Test
 		public void notFound() throws Exception {
-			String actual = Browser.getString(bundle, "aaaaaaaa");
+			String actual = Browser.getBundleString(bundle, "aaaaaaaa");
 
 			assertThat(actual, is(""));
 		}
