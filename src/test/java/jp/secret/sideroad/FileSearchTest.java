@@ -63,4 +63,12 @@ public class FileSearchTest {
 		assertThat(actual[1].getName(), is("foobar.html"));
 	}
 
+	@Test
+	public void listFilesMatche() throws Exception {
+		File[] actual = fileSearch.listFiles(rootDirectory, "*.html", ".*qunit-tests.*");
+
+		assertThat(actual.length, is(1));
+		assertThat(actual[0].getName(), is("foobar.html"));
+	}
+
 }
