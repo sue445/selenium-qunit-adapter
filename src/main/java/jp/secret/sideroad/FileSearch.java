@@ -154,17 +154,17 @@ public class FileSearch {
 		try {
 			for (File file : files) {
 				FileReader fr = new FileReader(file);
-	            BufferedReader br = new BufferedReader(fr);
-	            String line;
-	            while ((line = br.readLine()) != null) {
-				    Matcher m = p.matcher(line);
-	                if( m.matches() ){
-	                	matchedFile.add(file);
-	                	break;
-	                };
-	            }
-	            br.close();
-	            fr.close();
+				BufferedReader br = new BufferedReader(fr);
+				String line;
+				while ((line = br.readLine()) != null) {
+					Matcher m = p.matcher(line);
+					if( m.matches() ){
+						matchedFile.add(file);
+						break;
+					};
+				}
+				br.close();
+				fr.close();
 
 			}
 		} catch (FileNotFoundException e) {
