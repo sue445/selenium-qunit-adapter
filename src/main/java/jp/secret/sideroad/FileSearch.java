@@ -153,22 +153,7 @@ public class FileSearch {
 		List<File> matchedFile = new ArrayList<File>();
 		try {
 			for (File file : files) {
-				boolean matched = false;
-				Pattern p = Pattern.compile(matche);
-				BufferedReader br = null;
-				try {
-					br = new BufferedReader(new FileReader(file));
-					String line;
-					while ((line = br.readLine()) != null) {
-						Matcher m = p.matcher(line);
-						if( m.matches() ){
-							matched = true;
-							break;
-						};
-					}
-				} finally{
-					closeQuietly(br);
-				}
+				boolean matched = matchInFile(file, matche);
 
 				if(matched){
 					matchedFile.add(file);
@@ -183,6 +168,27 @@ public class FileSearch {
 		}
 		return matchedFile.toArray(new File[0]);
 
+	}
+
+	private boolean matchInFile(File file, String matche)
+			throws FileNotFoundException, IOException {
+		boolean matched = false;
+		Pattern p = Pattern.compile(matche);
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = br.readLine()) != null) {
+				Matcher m = p.matcher(line);
+				if( m.matches() ){
+					matched = true;
+					break;
+				};
+			}
+		} finally{
+			closeQuietly(br);
+		}
+		return matched;
 	}
 
 	/**
