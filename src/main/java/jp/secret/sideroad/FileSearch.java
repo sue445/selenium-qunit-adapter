@@ -181,7 +181,7 @@ public class FileSearch {
 				Matcher m = p.matcher(line);
 				if( m.matches() ){
 					return true;
-				};
+				}
 			}
 			return false;
 		} finally{
