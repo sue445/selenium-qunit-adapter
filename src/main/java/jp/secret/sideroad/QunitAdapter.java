@@ -13,13 +13,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-
-import com.opera.core.systems.OperaDriver;
 
 public class QunitAdapter {
 	private Map<String,WebDriver> drivers;
@@ -52,33 +46,15 @@ public class QunitAdapter {
 
 		hud = new HtmlUnitDriver();
 
-		for (String browser : browsers) {
-			if (browser.equals("firefox")) {
-				if (bundle.containsKey("webdriver.firefox.profile") &&
-						! bundle.getString("webdriver.firefox.profile").isEmpty()
-						) {
-					File profileDir = new File(
-							bundle.getString("webdriver.firefox.profile"));
-					FirefoxProfile profile = new FirefoxProfile(profileDir);
-					drivers.put(browser, new FirefoxDriver(profile));
-				} else {
-					drivers.put(browser, new FirefoxDriver());
-				}
-			} else if (browser.equals("chrome")) {
-				if (bundle.containsKey("webdriver.chrome.driver")) {
-					System.setProperty("webdriver.chrome.driver",
-							bundle.getString("webdriver.chrome.driver"));
-				}
-				drivers.put(browser, new ChromeDriver());
-			} else if (browser.equals("opera")) {
-				drivers.put(browser, new OperaDriver());
-			} else if (browser.equals("ie")) {
-				drivers.put(browser, new InternetExplorerDriver());
+		for (String browserName : browsers) {
+			Browser browser = Browser.toEnum(browserName);
+			if(browser != null){
+				drivers.put(browserName, browser.newWebDriver(bundle));
 			}
 		}
 
-		for (String browser : drivers.keySet()) {
-			drivers.get(browser).manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		for(WebDriver webDriver : drivers.values()){
+			webDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		}
 	}
 

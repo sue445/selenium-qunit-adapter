@@ -1,21 +1,81 @@
 package jp.secret.sideroad;
 
+import java.io.File;
+import java.util.ResourceBundle;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+
+import com.opera.core.systems.OperaDriver;
+
 /**
  * Supprt browsers
  * @author sue445
  *
  */
 public enum Browser {
-	FIREFOX("firefox"),
-	CHROME("chrome"),
-	OPERA("opera"),
-	IE("ie"),
+	FIREFOX("firefox", WebDriverStrategy.FIREFOX),
+	CHROME("chrome", WebDriverStrategy.CHROME),
+	OPERA("opera", WebDriverStrategy.OPERA),
+	IE("ie", WebDriverStrategy.IE),
 	;
 
 	private final String name;
+	private final WebDriverStrategy webDriverStrategy;
 
-	private Browser(String name) {
+	private Browser(String name, WebDriverStrategy webDriverStrategy) {
 		this.name = name;
+		this.webDriverStrategy = webDriverStrategy;
+	}
+
+	private enum WebDriverStrategy{
+		FIREFOX {
+			@Override
+			WebDriver newWebDriver(ResourceBundle bundle) {
+				if (bundle.containsKey("webdriver.firefox.profile") &&
+						! bundle.getString("webdriver.firefox.profile").isEmpty()
+						) {
+					File profileDir = new File(
+							bundle.getString("webdriver.firefox.profile"));
+					FirefoxProfile profile = new FirefoxProfile(profileDir);
+					return new FirefoxDriver(profile);
+				} else {
+					return new FirefoxDriver();
+				}
+			}
+		},
+		CHROME {
+			@Override
+			WebDriver newWebDriver(ResourceBundle bundle) {
+				if (bundle.containsKey("webdriver.chrome.driver")) {
+					System.setProperty("webdriver.chrome.driver",
+							bundle.getString("webdriver.chrome.driver"));
+				}
+				return new ChromeDriver();
+			}
+		},
+		OPERA {
+			@Override
+			WebDriver newWebDriver(ResourceBundle bundle) {
+				return new OperaDriver();
+			}
+		},
+		IE {
+			@Override
+			WebDriver newWebDriver(ResourceBundle bundle) {
+				return new InternetExplorerDriver();
+			}
+		},
+		;
+
+		abstract WebDriver newWebDriver(ResourceBundle bundle);
+	}
+
+	public WebDriver newWebDriver(ResourceBundle bundle){
+		return webDriverStrategy.newWebDriver(bundle);
 	}
 
 	/**
