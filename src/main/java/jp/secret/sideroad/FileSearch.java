@@ -2,7 +2,6 @@ package jp.secret.sideroad;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -148,29 +147,22 @@ public class FileSearch {
 		set.clear();
 	}
 
-	public File[] listFiles(String directoryPath, String fileName, String matche) {
+	public File[] listFiles(String directoryPath, String fileName, String matche) throws IOException {
 		File[] files = this.listFiles(directoryPath, fileName);
 		List<File> matchedFile = new ArrayList<File>();
-		try {
-			for (File file : files) {
-				boolean matched = matchInFile(file, matche);
 
-				if(matched){
-					matchedFile.add(file);
-				}
+		for (File file : files) {
+			boolean matched = matchInFile(file, matche);
+
+			if(matched){
+				matchedFile.add(file);
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return matchedFile.toArray(new File[0]);
 
+		return matchedFile.toArray(new File[0]);
 	}
 
-	private boolean matchInFile(File file, String matche) throws FileNotFoundException, IOException {
+	private boolean matchInFile(File file, String matche) throws IOException {
 		Pattern p = Pattern.compile(matche);
 		BufferedReader br = null;
 
