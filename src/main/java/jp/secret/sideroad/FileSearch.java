@@ -152,9 +152,7 @@ public class FileSearch {
 		List<File> matchedFile = new ArrayList<File>();
 
 		for (File file : files) {
-			boolean matched = matchInFile(file, matche);
-
-			if(matched){
+			if(matchInFile(file, matche)){
 				matchedFile.add(file);
 			}
 		}
