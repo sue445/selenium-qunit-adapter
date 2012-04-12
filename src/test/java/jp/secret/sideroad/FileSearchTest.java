@@ -3,10 +3,8 @@ package jp.secret.sideroad;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,22 +30,12 @@ public class FileSearchTest {
 				writer.write("11111qunit-tests22222");
 
 			} finally{
-				close(writer);
+				FileSearch.closeQuietly(writer);
 			}
 		};
 	};
 
 	private String rootDirectory;
-
-	private static void close(Closeable stream){
-		try {
-			if(stream != null){
-				stream.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Before
 	public void setUp(){

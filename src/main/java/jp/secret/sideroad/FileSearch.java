@@ -1,5 +1,6 @@
 package jp.secret.sideroad;
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -150,22 +151,28 @@ public class FileSearch {
 	public File[] listFiles(String directoryPath, String fileName, String matche) {
 		File[] files = this.listFiles(directoryPath, fileName);
 		List<File> matchedFile = new ArrayList<File>();
-		Pattern p = Pattern.compile(matche);
 		try {
 			for (File file : files) {
-				FileReader fr = new FileReader(file);
-				BufferedReader br = new BufferedReader(fr);
-				String line;
-				while ((line = br.readLine()) != null) {
-					Matcher m = p.matcher(line);
-					if( m.matches() ){
-						matchedFile.add(file);
-						break;
-					};
+				boolean matched = false;
+				Pattern p = Pattern.compile(matche);
+				BufferedReader br = null;
+				try {
+					br = new BufferedReader(new FileReader(file));
+					String line;
+					while ((line = br.readLine()) != null) {
+						Matcher m = p.matcher(line);
+						if( m.matches() ){
+							matched = true;
+							break;
+						};
+					}
+				} finally{
+					closeQuietly(br);
 				}
-				br.close();
-				fr.close();
 
+				if(matched){
+					matchedFile.add(file);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -177,4 +184,19 @@ public class FileSearch {
 		return matchedFile.toArray(new File[0]);
 
 	}
+
+	/**
+	 * close quietly. ignore all Exception
+	 * @param stream
+	 */
+	public static void closeQuietly(Closeable stream){
+		try {
+			if(stream != null){
+				stream.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
