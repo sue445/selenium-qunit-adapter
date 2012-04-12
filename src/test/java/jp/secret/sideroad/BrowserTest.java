@@ -3,6 +3,8 @@ package jp.secret.sideroad;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.util.ResourceBundle;
+
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -34,6 +36,25 @@ public class BrowserTest {
 		@Test
 		public void unknown() throws Exception {
 			assertThat(Browser.toEnum("aaaaaa"), is(nullValue()));
+		}
+	}
+
+	public static class GetStringTest{
+		private ResourceBundle bundle = ResourceBundle.getBundle("application");
+
+		@Test
+		public void found() throws Exception {
+			String actual = Browser.getString(bundle, "test.port");
+
+			assertThat(actual, is(notNullValue()));
+			assertThat(actual, is(not("")));
+		}
+
+		@Test
+		public void notFound() throws Exception {
+			String actual = Browser.getString(bundle, "aaaaaaaa");
+
+			assertThat(actual, is(""));
 		}
 	}
 

@@ -74,6 +74,20 @@ public enum Browser {
 		abstract WebDriver newWebDriver(ResourceBundle bundle);
 	}
 
+	/**
+	 * get bundle string (ignore all exceptions)
+	 * @param bundle
+	 * @param key
+	 * @return if not found, return empty string
+	 */
+	public static String getString(ResourceBundle bundle, String key){
+		try {
+			return bundle.getString(key);
+		} catch (Exception e) {
+			return "";
+		}
+	}
+
 	public WebDriver newWebDriver(ResourceBundle bundle){
 		return webDriverStrategy.newWebDriver(bundle);
 	}
