@@ -3,31 +3,64 @@ package jp.secret.sideroad;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
-import jp.secret.sideroad.rules.TemporaryFiles;
-
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class FileSearchTest {
 	private FileSearch fileSearch = new FileSearch();
 
 	@Rule
-	public TemporaryFiles tempFiles = new TemporaryFiles("a.txt", "b.java");
+	public TemporaryFolder tempFolder = new TemporaryFolder(){
+		@Override
+		protected void before() throws Throwable {
+			super.before();
 
+			newFile("foo.txt");
+			newFile("bar.html");
 
-	@Test
-	public void exists() throws Exception{
-		tempFiles.assertExistsFile("a.txt");
+			FileWriter writer = null;
+			try {
+				writer = new FileWriter(newFile("foobar.html"));
+				writer.write("aaaaaa");
+				writer.write("11111qunit-tests22222");
+
+			} finally{
+				close(writer);
+			}
+		};
+	};
+
+	private String rootDirectory;
+
+	private static void close(Closeable stream){
+		try {
+			if(stream != null){
+				stream.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Before
+	public void setUp(){
+		rootDirectory = tempFolder.getRoot().getAbsolutePath() + "/";
 	}
 
 	@Test
 	public void listFiles() throws Exception {
-		File[] actual = fileSearch.listFiles(tempFiles.getRootDirectory(), "*.java");
+		File[] actual = fileSearch.listFiles(rootDirectory, "*.html");
 
-		assertThat(actual.length, is(1));
-		assertThat(actual[0].getName(), is("b.java"));
+		assertThat(actual.length, is(2));
+		assertThat(actual[0].getName(), is("bar.html"));
+		assertThat(actual[1].getName(), is("foobar.html"));
 	}
 
 }
