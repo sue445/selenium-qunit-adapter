@@ -170,25 +170,23 @@ public class FileSearch {
 
 	}
 
-	private boolean matchInFile(File file, String matche)
-			throws FileNotFoundException, IOException {
-		boolean matched = false;
+	private boolean matchInFile(File file, String matche) throws FileNotFoundException, IOException {
 		Pattern p = Pattern.compile(matche);
 		BufferedReader br = null;
+
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String line;
 			while ((line = br.readLine()) != null) {
 				Matcher m = p.matcher(line);
 				if( m.matches() ){
-					matched = true;
-					break;
+					return true;
 				};
 			}
+			return false;
 		} finally{
 			closeQuietly(br);
 		}
-		return matched;
 	}
 
 	/**
